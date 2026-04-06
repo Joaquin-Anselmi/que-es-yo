@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Qué es yo? — Joaquín</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0a07;
+    --bg2: #131008;
+    --cream: #e8dfc8;
+    --muted: #7a7060;
+    --amber: #c8922a;
+    --amber-dim: #a07020;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--serif);
+    overflow-x: hidden;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.5;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: 4rem 2rem;
+  }
+
+  .hero-inner {
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .signo {
+    font-family: var(--serif);
+    font-size: clamp(8rem, 20vw, 18rem);
+    font-weight: 300;
+    line-height: 1;
+    color: var(--amber);
+    opacity: 0.12;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.5s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 2.5rem;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.8s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.5s forwards;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 3rem;
+    background: var(--muted);
+    margin: 0.8rem auto 0;
+    animation: lineGrow 1.5s ease 2s both;
+  }
+
+  /* ─── SECTION BASE ─── */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--muted) 30%, var(--muted) 70%, transparent);
+    opacity: 0.2;
+    margin: 0 2rem;
+    max-width: calc(100% - 4rem);
+  }
+
+  /* ─── ORIGEN ─── */
+  .origen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .big-text {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .big-text em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  .body-text {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: #b0a590;
+    margin-top: 1.5rem;
+  }
+
+  .coord-block {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 2;
+    margin-top: 2rem;
+    border-left: 1px solid var(--amber-dim);
+    padding-left: 1.2rem;
+    opacity: 0.7;
+  }
+
+  /* ─── PASIONES ─── */
+  .pasiones-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .pasiones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .pasion-card {
+    background: var(--bg2);
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+    cursor: default;
+  }
+
+  .pasion-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  .pasion-card:hover {
+    background: #1a1508;
+  }
+
+  .pasion-card:hover .pasion-icon {
+    color: var(--amber);
+    transform: scale(1.05);
+  }
+
+  .pasion-icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    transition: color 0.3s, transform 0.3s;
+    display: block;
+    color: var(--muted);
+  }
+
+  .pasion-name {
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+
+  .pasion-desc {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+    font-family: var(--mono);
+  }
+
+  /* ─── INCERTIDUMBRE ─── */
+  .incertidumbre {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .preguntas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 3rem 0;
+  }
+
+  .pregunta {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.6s, color 0.6s;
+  }
+
+  .pregunta.visible {
+    opacity: 1;
+    color: var(--cream);
+  }
+
+  .pregunta:nth-child(odd) { transform: translateX(-1rem); }
+  .pregunta:nth-child(even) { transform: translateX(1rem); }
+
+  .confesion {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 300;
+    line-height: 1.5;
+    margin: 3rem 0;
+  }
+
+  .confesion strong {
+    color: var(--amber);
+    font-weight: 400;
+  }
+
+  /* ─── QUOTE ─── */
+  .quote-section {
+    background: var(--bg2);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .quote-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  blockquote {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--cream);
+    position: relative;
+  }
+
+  blockquote::before {
+    content: '"';
+    font-size: 8rem;
+    line-height: 0.5;
+    color: var(--amber);
+    opacity: 0.15;
+    position: absolute;
+    top: 0;
+    left: -1rem;
+    font-family: var(--serif);
+  }
+
+  .quote-attr {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 2rem;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(122, 112, 96, 0.15);
+  }
+
+  .footer-name {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(200, 146, 42, 0.3);
+  }
+
+  .footer-sub {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 1rem;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lineGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .origen-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .pasiones-grid { grid-template-columns: 1fr; }
+    blockquote::before { left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="signo">¿?</div>
+  <div class="hero-inner">
+    <p class="hero-tag">Una presentación — Joaquín — 23 años</p>
+    <h1 class="hero-title">¿Qué es<br><em>yo?</em></h1>
+    <p class="hero-sub">Patagonia → Buenos Aires → en algún lugar del medio</p>
+  </div>
+  <p class="scroll-hint">desplazar</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ORIGEN -->
+<section>
+  <div class="origen-grid reveal">
+    <div>
+      <p class="label">Origen</p>
+      <h2 class="big-text">Crecí entre<br><em>montañas.</em><br>Vivo entre ruido.</h2>
+      <p class="body-text">
+        Villa La Angostura, Patagonia Neuquina. Eso marcó algo. La montaña,
+        los deportes de aventura, el ritmo de pueblo. Hoy vivo en el AMBA
+        hace seis años. No volvería. Pero tampoco me olvido.
+      </p>
+    </div>
+    <div>
+      <div class="coord-block">
+        <div>40°45'S / 71°38'O — Villa La Angostura</div>
+        <div>34°36'S / 58°22'O — Buenos Aires</div>
+        <div>↓ distancia: 1.620 km</div>
+        <div>↓ años transcurridos: 6</div>
+        <div>↓ probabilidad de regreso: descabellada</div>
+      </div>
+      <p class="body-text" style="margin-top: 2rem;">
+        Pasar de la burbuja angosturense a la inmensidad del AMBA es alucinante.
+        Y eso que todavía no conozco mucho más allá de Corrientes. Hay un mundo
+        enorme esperando.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PASIONES -->
+<section style="padding-top: 5rem; padding-bottom: 5rem;">
+  <div class="pasiones-header reveal">
+    <p class="label">Lo que me mueve</p>
+    <h2 class="big-text">Lo quiero <em>todo.</em></h2>
+  </div>
+  <div class="pasiones-grid reveal">
+    <div class="pasion-card" data-num="01">
+      <span class="pasion-icon">◎</span>
+      <h3 class="pasion-name">Fotografía</h3>
+      <p class="pasion-desc">De eso estoy segurísimo. Siempre. Sin dudas. La imagen como lenguaje, como oficio, como propósito.</p>
+    </div>
+    <div class="pasion-card" data-num="02">
+      <span class="pasion-icon">▭</span>
+      <h3 class="pasion-name">Cine</h3>
+      <p class="pasion-desc">De las mejores formas de contar historias. La paso muy bien viendo, analizando, hablando sobre ellas.</p>
+    </div>
+    <div class="pasion-card" data-num="03">
+      <span class="pasion-icon">→</span>
+      <h3 class="pasion-name">Viajar</h3>
+      <p class="pasion-desc">Un pueblo a 3 km o un país minúsculo al otro lado del mundo. De eso también estoy seguro.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INCERTIDUMBRE -->
+<section>
+  <div class="incertidumbre">
+    <p class="label reveal">El estado permanente</p>
+    <h2 class="big-text reveal" style="text-align:center;">La <em>incertidumbre</em><br>como compañera</h2>
+
+    <div class="preguntas" id="preguntas">
+      <p class="pregunta">¿Qué quiero hacer realmente?</p>
+      <p class="pregunta">¿Fotografía periodística o algo más?</p>
+      <p class="pregunta">¿El dinero viene con lo que te gusta?</p>
+      <p class="pregunta">¿Cine, comunicación, otra cosa?</p>
+      <p class="pregunta">¿Me estoy moviendo o solo creo que sí?</p>
+    </div>
+
+    <p class="confesion reveal">
+      Soy <strong>codicioso</strong>. Lo quiero todo —<br>
+      la fotografía, el cine, los viajes, la estabilidad.<br>
+      No creo que eso sea un problema.<br>
+      Creo que es una <strong>herramienta.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <div class="quote-inner reveal">
+    <blockquote>
+      Me pongo desafíos. Hago cosas que no haría habitualmente.
+      Y después, si logro terminar, me siento orgulloso.
+    </blockquote>
+    <p class="quote-attr">— Joaquín, sobre sí mismo</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-name">Joaquín</p>
+  <p class="footer-sub">Comunicación · Fotografía · Patagonia · AMBA · En tránsito</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('in');
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // preguntas staggered reveal
+  const preguntas = document.querySelectorAll('.pregunta');
+  const pregObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        preguntas.forEach((p, i) => {
+          setTimeout(() => p.classList.add('visible'), i * 220);
+        });
+        pregObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const contenedor = document.getElementById('preguntas');
+  if (contenedor) pregObserver.observe(contenedor);
+</script>
+</body>
+</html>
